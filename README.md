@@ -1,7 +1,6 @@
 # text_distance Datasets and algorithm for social media and books :books:  :tv:
 
-## Technologies used :  Google BigQuery
-##                      Python
+## Technologies used :  Google BigQuery , Python
                      
 ### Thesis - Datasetes and algorithm to compute distances between ranked non-conjoint list 
 
