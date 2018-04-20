@@ -52,3 +52,53 @@ SELECT book_name  ,chapter_id , word
                    ,count(*)     over (partition by book_name) as words_per_book
                    ,count(*)     over () as tot
  FROM [books.books_by_chapter_sample]  )   group by 1,2,3,4,5,6,7,8,9   )    order by global_weight desc 
+ 
+ ### calculating distance of chapter from its own book 
+  
+ -- Distance between book and its chapters  *** distances_of_chapter_fixed  ***
+  
+  -- The distance is the summary of missing_in_local+distance from global
+
+select      book_name ,chapter_id,sum(words_per_chapter) words_per_chapter  ,sum(words_per_book) words_per_book , sum(words) common_words_per_chapter,  (sum(distance_per_user)) /2  distance_per_user ,  from 
+--### Summerize the distance per each user , for his existing words 
+(select   book_name  book_name,  chapter_id , words_per_book,words_per_chapter, sum(distance) as distance_per_user ,count(*) as words from 
+(select   global.word,global.gln, local.tot , local.lln , local.book_name book_name , chapter_id, global.words_per_book words_per_book,local.words_per_chapter words_per_chapter,
+
+-- Calculating distance between local to global weight for each word 
+if (local.lln is null  ,global.gln ,  abs(global.gln - local.lln ))    as distance    from 
+
+
+ (select   book_name , a.word  as word , a.gln as gln  ,words_per_book  from 
+--Each word in the general corpus 
+ (select   book_name, word   as  word,    local_weight     as gln  , words_per_book   from [books.help2_NN_books_sample]   ) a 
+  )  global  
+--Inner join 
+  Join 
+-- Each word in the local list of the chapter   
+(SELECT * ,in_chapter_weight            lln FROM [books.help3_NN_books_sample]   
+ )  local 
+
+ on   global.word=local.word  
+ and  global.book_name=local.book_name 
+  
+  ) exist_in_local
+  group by 1,2,3 ,4
+) , 
+
+
+( 
+-- Substract the weight of existing words from 1 , to get the global weight of the missing words per chapter    
+   select book_name ,chapter_id, 1-sum(weight) distance_per_user   from  
+
+   ( select d.book_name  book_name, c.weight weight,chapter_id     from 
+-- Global weight of all words per book    
+   (select book_name,word,local_weight weight   from [books.help2_NN_books_sample]     ) c
+     join
+--  join Local words only for each chapter    
+   (select     book_name,chapter_id, word       FROM [books.help3_NN_books_sample]     )  d 
+    on         c.word=d.word
+    where      c.book_name=d.book_name 
+    ) 
+	 group by book_name,chapter_id)  missing_in_local 
+	
+   group by 1,2  order by 1,2 
