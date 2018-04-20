@@ -25,3 +25,12 @@ where book_name in
 and chapter_id in ('01.txt','02.txt','03.txt','04.txt','05.txt','06.txt','07.txt','08.txt','09.txt','10.txt')
 and pos in ('NN','NNS') 
 and word not in ('“','’','-','(',')','‘','\'','_','[',']')
+
+
+-- creating help2_NN_books_sample (aggregation by word,book) , local_weight=weight inside a book
+
+select  * ,local_counter/words_per_book local_weight ,  global_counter/tot as global_weight from 
+(select * , sum(local_counter) over (partition by book_name) as words_per_book  from  
+(select * from 
+(SELECT book_name   , word , count(word)  over (partition by  book_name,word ) as local_counter,  count(word) over (partition by  word) as  global_counter , count(*) over () as tot
+ FROM [books.books_by_chapter_sample]   order by 3 desc ) group by 1,2,3,4,5 ) ) 
