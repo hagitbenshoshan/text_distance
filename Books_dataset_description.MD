@@ -53,7 +53,7 @@ SELECT book_name  ,chapter_id , word
                    ,count(*)     over () as tot
  FROM [books.books_by_chapter_sample]  )   group by 1,2,3,4,5,6,7,8,9   )    order by global_weight desc 
  
- ### calculating distance of chapter from its own book 
+ ### calculating distance of chapter from its own book (distance_of_chapter_from_book)   
   
  -- Distance between book and its chapters  *** distances_of_chapter_fixed  ***
   
