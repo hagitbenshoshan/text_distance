@@ -1,4 +1,4 @@
--- creating book_by_chapter_sample
+% creating book_by_chapter_sample %
 
 SELECT *  FROM [books.books_by_chapter] 
 where book_name in 
