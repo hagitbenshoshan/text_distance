@@ -30,16 +30,15 @@ and word not in ('“','’','-','(',')','‘','\'','_','[',']')
 ```
 
 ### creating help2_NN_books_sample (aggregation by word,book) , local_weight=weight inside a book
-
+```
 select  * ,local_counter/words_per_book local_weight ,  global_counter/tot as global_weight from 
 (select * , sum(local_counter) over (partition by book_name) as words_per_book  from  
 (select * from 
 (SELECT book_name   , word , count(word)  over (partition by  book_name,word ) as local_counter,  count(word) over (partition by  word) as  global_counter , count(*) over () as tot
  FROM [books.books_by_chapter_sample]   order by 3 desc ) group by 1,2,3,4,5 ) ) 
- 
+``` 
 ### creating help3_NN_books_sample (aggregation by word,chapter,book) , local_weight=weight inside a chapter
-
- 
+``` 
 select  *    ,chapter_counter/words_per_chapter in_chapter_weight ,book_counter/words_per_book in_book_weight ,  global_counter/tot as global_weight 
 from 
 (
@@ -102,9 +101,10 @@ if (local.lln is null  ,global.gln ,  abs(global.gln - local.lln ))    as distan
 	 group by book_name,chapter_id)  missing_in_local 
 	
    group by 1,2  order by 1,2 
-   
+```   
    ### Calculating matrix of all chapters distance (example of 3 books) 
-       select book_name ,book_name2nd , chapter_id  , chapter_id2nd ,  sum(diff/2) as dist from 
+```
+select book_name ,book_name2nd , chapter_id  , chapter_id2nd ,  sum(diff/2) as dist from 
     (  select a.*, b.book_name book_name2nd, b.chapter_id chapter_id2nd , b.in_chapter_weight  in_chapter_weight2nd  , abs( a.in_chapter_weight-b.in_chapter_weight) diff from 
     (select book_name,word,chapter_id,ifnull(in_chapter_weight,0)  in_chapter_weight  from 
     ( SELECT  * FROM `books.help5_NN_books_sample` CROSS JOIN `books.help4_NN_books_sample`   CROSS JOIN `books.help7_NN_books_sample` 
@@ -126,3 +126,4 @@ if (local.lln is null  ,global.gln ,  abs(global.gln - local.lln ))    as distan
        where  
        a.in_chapter_weight<>b.in_chapter_weight ) 
        group by 1,2 ,3 ,4  order by 1,2,3,4
+```
