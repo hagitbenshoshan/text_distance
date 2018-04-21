@@ -105,7 +105,6 @@ if (local.lln is null  ,global.gln ,  abs(global.gln - local.lln ))    as distan
    
    ### Calculating matrix of all chapters distance (example of 3 books) 
        select book_name ,book_name2nd , chapter_id  , chapter_id2nd ,  sum(diff/2) as dist from 
-    
     (  select a.*, b.book_name book_name2nd, b.chapter_id chapter_id2nd , b.in_chapter_weight  in_chapter_weight2nd  , abs( a.in_chapter_weight-b.in_chapter_weight) diff from 
     (select book_name,word,chapter_id,ifnull(in_chapter_weight,0)  in_chapter_weight  from 
     ( SELECT  * FROM `books.help5_NN_books_sample` CROSS JOIN `books.help4_NN_books_sample`   CROSS JOIN `books.help7_NN_books_sample` 
@@ -114,10 +113,7 @@ if (local.lln is null  ,global.gln ,  abs(global.gln - local.lln ))    as distan
       left   join 
      `books.help3_NN_books_sample`   using(book_name,word,chapter_id)
        )    a
-      
-      
-     left    join 
-     
+      left    join 
       (select book_name,word,chapter_id  ,ifnull(in_chapter_weight,0)  in_chapter_weight   from 
       (SELECT  * FROM `books.help5_NN_books_sample` CROSS JOIN `books.help4_NN_books_sample`   CROSS JOIN `books.help7_NN_books_sample` 
        where book_name in ('Emma_by_Jane_Austen-chapters','Pride_and_Prejudice_by_Jane_Austen-chapters' , 
@@ -126,7 +122,6 @@ if (local.lln is null  ,global.gln ,  abs(global.gln - local.lln ))    as distan
       left   join 
      `books.help3_NN_books_sample`   using(book_name,word,chapter_id)
        )   b
-      
        using(word ) 
        where  
        a.in_chapter_weight<>b.in_chapter_weight ) 
