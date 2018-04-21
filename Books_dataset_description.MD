@@ -1,5 +1,5 @@
 ### creating book_by_chapter_sample 
-
+```
 SELECT *  FROM [books.books_by_chapter] 
 where book_name in 
 (
@@ -27,7 +27,7 @@ where book_name in
 and chapter_id in ('01.txt','02.txt','03.txt','04.txt','05.txt','06.txt','07.txt','08.txt','09.txt','10.txt')
 and pos in ('NN','NNS') 
 and word not in ('“','’','-','(',')','‘','\'','_','[',']')
-
+```
 
 ### creating help2_NN_books_sample (aggregation by word,book) , local_weight=weight inside a book
 
