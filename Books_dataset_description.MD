@@ -25,7 +25,7 @@ where book_name in
 'Treasure_Island_by_Robert_Louis_Stevenson-chapters',
 'Wuthering_Heigh-chapters') 
 and chapter_id in ('01.txt','02.txt','03.txt','04.txt','05.txt','06.txt','07.txt','08.txt','09.txt','10.txt')
-and pos in ('NN','NNS') 
+and pos in ('NN','NNS')  /*  ('JJ','JJR','JJS')   for book_by_chapter_sample_JJ */ 
 and word not in ('“','’','-','(',')','‘','\'','_','[',']')
 ```
 
