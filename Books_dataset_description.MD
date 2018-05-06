@@ -95,7 +95,50 @@ FROM (
   GROUP BY     book_name,    chapter_id   ) exist_in_global
 GROUP BY
   1,  2 ORDER BY  1,  2
-
+```
+### calculating distance of chapter in virtual book from DVR (distance_of_chapter_from_virtual_DVR_JJ)  
+```
+SELECT
+  book_name,
+  chapter_id,
+  SUM(words_per_chapter) words_per_chapter,
+  SUM(words_per_book) words_per_book,
+  SUM(words) common_words_per_chapter,
+  (SUM(distance_per_user)) /2 distance_per_user
+FROM (
+  SELECT
+    book_name,    chapter_id,    words_per_book,    words_per_chapter,    SUM(distance) AS distance_per_user,    COUNT(*) AS words
+  FROM (
+    SELECT
+      word,
+      gln,
+      tot,
+      lln,
+      book_name book_name,
+      chapter_id,
+      words_per_book words_per_book,
+      words_per_chapter words_per_chapter,
+      -- Calculating distance between local to global weight for each word
+      if ( lln IS NULL,        gln,        ABS( gln - lln )) AS distance    FROM 
+      (      SELECT
+        *,
+        global_weight  AS gln,
+        in_chapter_weight lln
+      FROM
+        [books.help3_JJ_books_sample_virt] )   ) exist_in_local
+  GROUP BY     1,    2,    3,    4 ),
+    -- Calculating distance for missing words 
+  (
+  SELECT
+    book_name,
+    chapter_id,
+    1- SUM(global_weight  ) distance_per_user,
+    SUM(global_weight  ) global_weight
+  FROM
+    [books.help3_JJ_books_sample_virt]
+  GROUP BY     book_name,    chapter_id   ) exist_in_global
+GROUP BY
+  1,  2 ORDER BY  1,  2
 ``` 
 ### OLD calculating distance of chapter from its own book (distance_of_chapter_from_its_book_NN)   
 ```  
