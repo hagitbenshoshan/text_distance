@@ -142,9 +142,9 @@ GROUP BY
 ```
 ### creating 21 virtual books (books_by_chapter_sample_virt_NN / books_by_chapter_sample_virt_JJ) 
 ```
-  select   concat('virt_', string(1+ABS(HASH(integer( 1000* (rnd))) )% 21 ))   book_name ,book_name old_book_name,	
-  chapter_id,	origin_word,	pos,	word    from  
- ( select rand() rnd  , *  from  [books.books_by_chapter_sample] where pos contains 'NN' ) 
+  select   concat('virt_', string(ABS(HASH(integer( 1000* (rand()))) )% 21 ))   book_name ,book_name old_book_name,	
+  chapter_id   from  
+ ( select  chapter_id , book_name   from  [books.books_by_chapter_sample] where pos contains 'NN'  group by 1,2  )  order by 1
   
 ``` 
 ### OLD calculating distance of chapter from its own book (distance_of_chapter_from_its_book_NN)   
