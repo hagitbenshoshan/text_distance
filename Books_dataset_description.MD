@@ -51,8 +51,53 @@ SELECT book_name  ,chapter_id , word
                    ,count(*)     over (partition by book_name) as words_per_book
                    ,count(*)     over () as tot
  FROM [books.books_by_chapter_sample]  )   group by 1,2,3,4,5,6,7,8,9   )    order by global_weight desc 
+```
+### calculating distance of chapter from its own book (distance_of_chapter_from_its_book_NN)  
+```
+SELECT
+  book_name,
+  chapter_id,
+  SUM(words_per_chapter) words_per_chapter,
+  SUM(words_per_book) words_per_book,
+  SUM(words) common_words_per_chapter,
+  (SUM(distance_per_user)) /2 distance_per_user
+FROM (
+  SELECT
+    book_name,    chapter_id,    words_per_book,    words_per_chapter,    SUM(distance) AS distance_per_user,    COUNT(*) AS words
+  FROM (
+    SELECT
+      word,
+      gln,
+      tot,
+      lln,
+      book_name book_name,
+      chapter_id,
+      words_per_book words_per_book,
+      words_per_chapter words_per_chapter,
+      -- Calculating distance between local to global weight for each word
+      if ( lln IS NULL,        gln,        ABS( gln - lln )) AS distance    FROM 
+      (      SELECT
+        *,
+        in_book_weight AS gln,
+        in_chapter_weight lln
+      FROM
+        [books.help3_NN_books_sample] )   ) exist_in_local
+  GROUP BY     1,    2,    3,    4 ),
+    -- Calculating distance for missing words 
+  (
+  SELECT
+    book_name,
+    chapter_id,
+    1- SUM(in_book_weight ) distance_per_user,
+    SUM(in_book_weight ) in_book_weight
+  FROM
+    [books.help3_NN_books_sample]
+  GROUP BY     book_name,    chapter_id   ) exist_in_global
+GROUP BY
+  1,  2 ORDER BY  1,  2
+
 ``` 
-### calculating distance of chapter from its own book (distance_of_chapter_from_its_book_NN)   
+### OLD calculating distance of chapter from its own book (distance_of_chapter_from_its_book_NN)   
 ```  
  -- Distance between book and its chapters  *** distances_of_chapter_fixed  ***
   
