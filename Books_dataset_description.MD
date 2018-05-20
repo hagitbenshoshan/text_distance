@@ -36,6 +36,35 @@ select  * ,local_counter/words_per_book local_weight ,  global_counter/tot as gl
 (select * from 
 (SELECT book_name   , word , count(word)  over (partition by  book_name,word ) as local_counter,  count(word) over (partition by  word) as  global_counter , count(*) over () as tot
  FROM [books.books_by_chapter_sample]   order by 3 desc ) group by 1,2,3,4,5 ) ) 
+```
+# creating improved aggregation - Cleaning the current book from the aggregation (Help2 table) 
+```
+SELECT
+  *,
+  local_counter/words_per_book local_weight,
+  global_counter/tot AS global_weight,
+  (global_counter-local_counter)/tot AS global_weight_clean,
+  (global_counter-local_counter) as     global_counter_clean
+FROM (
+  SELECT
+    *,
+    SUM(local_counter) OVER (PARTITION BY book_name) AS words_per_book
+  FROM (
+    SELECT
+      *
+    FROM (
+      SELECT
+        book_name,
+        word,
+        pos,
+        COUNT(word) OVER (PARTITION BY book_name, word ) AS local_counter,
+        COUNT(word) OVER (PARTITION BY word)             AS global_counter,
+        COUNT(*) OVER () AS tot
+      FROM
+        [books.original_21_books_all_JJ_NN]
+      ORDER BY         3 DESC )
+    GROUP BY
+      1,      2,      3,      4,      5,      6) )
 ``` 
 ### creating help3_NN_books_sample (aggregation by word,chapter,book) , local_weight=weight inside a chapter
 ``` 
