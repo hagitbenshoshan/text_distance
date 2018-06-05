@@ -38,7 +38,7 @@ select  * ,local_counter/words_per_book local_weight ,  global_counter/tot as gl
  FROM [books.books_by_chapter_sample]  where  pos in ('NN','NNS')  --   ('JJ','JJR','JJS') 
  order by 3 desc ) group by 1,2,3,4,5 ) )
 ```
-# creating improved aggregation - Cleaning the current book from the aggregation (Help2 table) 
+# creating improved aggregation - Cleaning the current book from the aggregation (help2_JJ_sample_clean table) 
 ```
 SELECT
   *,
@@ -62,25 +62,29 @@ FROM (
         COUNT(word) OVER (PARTITION BY word)             AS global_counter,
         COUNT(*) OVER () AS tot
       FROM
-        [books.original_21_books_all_JJ_NN]
+        [books.book_by_chapter_sample] where  pos in ('JJ','JJR','JJS')    
       ORDER BY         3 DESC )
     GROUP BY
       1,      2,      3,      4,      5,      6) )
 ``` 
 ### creating help3_NN_books_sample (aggregation by word,chapter,book) , local_weight=weight inside a chapter
 ``` 
-select  *    ,chapter_counter/words_per_chapter in_chapter_weight ,book_counter/words_per_book in_book_weight ,  global_counter/tot as global_weight 
+select  *    ,chapter_counter/words_per_chapter in_chapter_weight ,book_counter/words_per_book in_book_weight ,  global_counter/tot as global_weight ,  
+          (book_counter-chapter_counter)/words_per_book AS in_book_weight_clean,
+          (book_counter-chapter_counter) as     in_book_counter_clean , 
+          (global_counter-chapter_counter) as   global_counter_clean, 
+          (global_counter-chapter_counter)/(tot-chapter_counter)  as   global_weight_clean  
 from 
 (
 select * from ( 
 SELECT book_name  ,chapter_id , word   
                    ,count(word)  over (partition by  book_name,chapter_id,word ) as chapter_counter
-                   ,count(word)  over (partition by  book_name,word ) as book_counter
-                   ,count(word)  over (partition by  word) as  global_counter   
+                   ,count(word)  over (partition by  book_name,word )     as book_counter
+                   ,count(word)  over (partition by  word)                as  global_counter   
                    ,count(*)     over (partition by book_name,chapter_id) as words_per_chapter 
-                   ,count(*)     over (partition by book_name) as words_per_book
+                   ,count(*)     over (partition by book_name)            as words_per_book
                    ,count(*)     over () as tot
- FROM [books.books_by_chapter_sample]  )   group by 1,2,3,4,5,6,7,8,9   )    order by global_weight desc 
+ FROM [books.book_by_chapter_sample] where  pos in ('NN','NNS')    )   group by 1,2,3,4,5,6,7,8,9   )    order by global_weight desc 
 ```
 ### calculating distance of chapter from its own book (distance_of_chapter_from_its_book_NN)  
 ```
