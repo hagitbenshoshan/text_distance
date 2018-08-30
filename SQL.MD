@@ -33,7 +33,7 @@ select chapter_id , sum(KL_SYM) KL_distance from
         left join        
         (SELECT chapter_id  , word, counter , local_weight             
       FROM
-        [cooladata-cs-solutions:books.KL_tresure]   ) a -- where user_id in ( 11596,223692, 1002035)  ) a
+        [cooladata-cs-solutions:books.KL_tresure]   ) a 
      ON
       a.word=b.word )   )   
    GROUP BY
