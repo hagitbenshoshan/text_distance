@@ -39,5 +39,27 @@ select chapter_id , sum(KL_SYM) KL_distance from
    GROUP BY
   1   
 
+### Create another chapter table , from diffrent origin  (KL1) ### 
+SELECT
+  book_name,
+  word,
+  '99.txt' chapter_id,
+  counter,
+  weight_in_chapter,
+  book_length,
+  chapter_length,
+  counter_in_book,
+  weight_in_book,
+  global_weight,
+  tot_counter,
+  tot
+FROM
+  [cooladata-cs-solutions:books.help4_NN_books]
+WHERE
+  book_name = 'A_Study_In_Scarlet-chapters'
+  AND chapter_id ='01.txt'
+ORDER BY
+  chapter_id,
+  weight_in_chapter DESC
 
  
