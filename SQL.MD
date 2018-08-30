@@ -96,3 +96,28 @@ global_weight ,
 sum (global_weight) over (order by global_weight desc ) as cum_sum   FROM [cooladata-cs-solutions:imdb3.help2]
 order by global_weight  desc  )  order by global_weight  desc )  where word_counter > 5  ) a
 join (SELECT count(distinct  user_id , 99999) as users_per_word , word  FROM [cooladata-cs-solutions:imdb3.help33]  group by word ) b on a.word=b.word  )  order by rnk   
+
+### Results_kl_dist_chapter_DVR_10 ### 
+--   KL Distances of chapter from general DVR 
+ 
+SELECT
+  cid,
+  SUM(KL_SYM) KL_distance
+FROM (
+  SELECT
+    *,
+    IF(cid IS NULL, (1/1000), (( global_weight- local_weight) * log10 (global_weight / local_weight )) ) AS KL_SYM
+  FROM (
+    SELECT
+       cid,
+       word word,
+       chapter_counter counter,
+       in_chapter_weight local_weight,
+       global_weight global_weight,
+      (1/10000) epsilon
+   
+      FROM
+       [cooladata-cs-solutions:validation.books_10chapters_VECTORS]       
+      )) 
+GROUP BY
+  1
