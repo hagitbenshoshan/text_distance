@@ -84,55 +84,15 @@ FROM [imdb3.help3_tfidf_weighted]  )
 group by 1 ) 
 
 ### Create TF/IDF for DVR   ### 
-SELECT
-  *,
-  word_counter TF,
-  word_counter * IDF AS TFIDF,
-  1+LOG10(word_counter ) WTF,
-  IDF * ( 1+LOG10(word_counter ) ) WTFIDF
-FROM (
-  SELECT
-    rnk,
-    a.word word,
-    word_counter,
-    global_weight,
-    cum_sum,
-    prev_cum_sum,
-    added,
-    users_per_word,
-    LOG10(3969 /users_per_word ) IDF
-  FROM (
-    SELECT
-      *,
-      ABS(100- ( cum_sum / prev_cum_sum) * 100) AS added
-    FROM (
-      SELECT
-        *,
-        lead (cum_sum) OVER (ORDER BY cum_sum DESC ) AS prev_cum_sum
-      FROM (
-        SELECT
-          rnk,
-          word,
-          word_counter,
-          global_weight,
-          sum (global_weight) OVER (ORDER BY global_weight DESC ) AS cum_sum
-        FROM
-          [imdb3.help2]
-        ORDER BY
-          global_weight DESC )
-      ORDER BY
-        global_weight DESC )
-    WHERE
-      word_counter > 5 ) a
-  JOIN (
-    SELECT
-      COUNT(DISTINCT user_id, 99999) AS users_per_word,
-      word
-    FROM
-      [imdb3.help33]
-    GROUP BY
-      word ) b
-  ON
-    a.word=b.word )
-ORDER BY
-  rnk
+select * , word_counter TF ,   word_counter * IDF as TFIDF , 1+log10(word_counter ) WTF  , IDF *  ( 1+log10(word_counter ) ) WTFIDF  from 
+( select  rnk, a.word word, word_counter , 
+global_weight , cum_sum,prev_cum_sum, added, users_per_word  , log10(3969 /users_per_word ) IDF    from 
+(select  * ,  abs(100- (  cum_sum / prev_cum_sum)  * 100)  as added  from 
+(select *, lead (cum_sum) over (order by cum_sum desc  ) as prev_cum_sum   from 
+( SELECT 
+rnk, word , word_counter , 
+global_weight , 
+-- lead (global_weight) over (order by global_weight  ) as prev_weight , 
+sum (global_weight) over (order by global_weight desc ) as cum_sum   FROM [cooladata-cs-solutions:imdb3.help2]
+order by global_weight  desc  )  order by global_weight  desc )  where word_counter > 5  ) a
+join (SELECT count(distinct  user_id , 99999) as users_per_word , word  FROM [cooladata-cs-solutions:imdb3.help33]  group by word ) b on a.word=b.word  )  order by rnk   
