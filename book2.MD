@@ -22,7 +22,6 @@ if(chapter_id is null ,  1/sum(total) over ()  , (( global_weight- local_weight)
 (select *, if ( second_part.counter_in_chapter> 0 ,0 , 1 ) as missing   , if ( second_part.counter_in_chapter> 0 ,1 , 0 ) as present    , 1 as total  ,
 if (inbook_rank < 21 and  second_part.counter_in_chapter is null,1,0 )  as missing_in_top_20  , 
 if (inbook_rank < 11 and  second_part.counter_in_chapter is null,1,0 )  as missing_in_top_10 from 
-
 (select * from 
 ( select * from 
   (SELECT book_name,chapter_id  from  `cooladata-cs-solutions.books2.NN_base`   group by 1,2  ) c
@@ -34,3 +33,24 @@ left   join
 (SELECT chapter_id , word, counter_in_chapter , words_in_chapter, local_weight, book_name ,word  as joiner  FROM `cooladata-cs-solutions.books2.NN_base`   ) second_part 
 using(book_name, chapter_id , word)    ))
 GROUP BY 1,2  order by 4 desc 
+
+### KL and L!Norm distances ### 
+select chapter_id ,book_name, avg(words_in_chapter) words_in_chapter, sum(KL_SYM) KL_distance, sum(L1_SYM) L1_distance , sum(missing) missing , sum(total) total , sum(present) present   , sum(missing) /sum(total)  as missing_pct , 1/sum(total) epsilon , 
+sum(missing_in_top_10)  missing_in_top_10 , 
+sum(missing_in_top_20)  missing_in_top_20    from
+( SELECT *,
+if(chapter_id is null ,  1/sum(total) over ()  , (( global_weight- local_weight) * log10 (global_weight / local_weight )) ) AS KL_SYM  , abs(global_weight-ifnull(local_weight,0) ) as L1_SYM FROM 
+(select *, if ( second_part.counter_in_chapter> 0 ,0 , 1 ) as missing   , if ( second_part.counter_in_chapter> 0 ,1 , 0 ) as present    , 1 as total  ,
+if (inbook_rank < 21 and  second_part.counter_in_chapter is null,1,0 )  as missing_in_top_20  , 
+if (inbook_rank < 11 and  second_part.counter_in_chapter is null,1,0 )  as missing_in_top_10 from 
+(select * from 
+( select * from 
+  (SELECT book_name,chapter_id  from  `cooladata-cs-solutions.books2.NN_base`   group by 1,2  ) c
+  left join 
+  (SELECT word ,book_name,in_book_weight global_weight,rank() over (partition by book_name order by in_book_weight desc ) as inbook_rank   from  `cooladata-cs-solutions.books2.NN_base`   group by 1,2,3  ) b
+  using (book_name) 
+)) first_part 
+left   join
+(SELECT chapter_id , word, counter_in_chapter , words_in_chapter, local_weight, book_name ,word  as joiner  FROM `cooladata-cs-solutions.books2.NN_base`   ) second_part 
+using(book_name, chapter_id , word)    ))
+GROUP BY 1,2  order by 4 desc
