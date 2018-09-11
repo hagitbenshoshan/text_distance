@@ -56,7 +56,7 @@ left   join
 using(book_name, chapter_id , word)    ))
 GROUP BY 1,2  order by 4 desc
 ```
-### KL / L1 distance for 10 chapters (newest version) ###
+### KL / L1 distance for 10 chapters  : Distance of chapter from its book (newest version) ###
 ```
 select chapter_id ,book_name, avg(words_in_chapter) words_in_chapter, sum(KL_SYM) KL_distance, sum(L1_SYM)/2  L1_distance , sum(missing) missing , sum(total) total , sum(present) present   , sum(missing) /sum(total)  as missing_pct , 1/sum(total) epsilon , 
 sum(missing_in_top_10)  missing_in_top_10 , 
@@ -82,4 +82,29 @@ left   join  /* Second_part is  all the words in all the chapters in all the boo
 using(book_name, chapter_id , word)  )  ) 
 GROUP BY 1,2  order by 4 desc
 ```
-
+### KL / L1 distance of book from DVR 
+```
+-- Distance of single book from DVR 
+SELECT
+  book_name,
+  sum(counter_in_book) counter_in_book,
+  SUM(KL_SYM) KL_distance,
+  SUM(L1_SYM)/2 L1_distance 
+  
+FROM (  
+  SELECT
+    *,
+    IF(local_weight IS NULL,
+    1/162801  ,   -- number of records in NN_base_10 table 
+      (( global_weight- local_weight) * log10 (global_weight / local_weight )) ) AS KL_SYM,
+    ABS(global_weight-ifnull(local_weight,
+        0) ) AS L1_SYM
+  FROM (  
+(select * from 
+             (select  word , global_weight   FROM `cooladata-cs-solutions.books2.NN_base_10`   group by 1,2)    -- All words (global weight) x
+cross  join  (select  book_name  FROM `cooladata-cs-solutions.books2.NN_base_10`  group by 1 ) ) p1             -- All books 
+left join 
+(   SELECT  word   , book_name ,counter_in_book ,counter_in_corpus   ,in_book_weight local_weight , words_in_book , words_in_corpus   FROM `cooladata-cs-solutions.books2.NN_base_10`  --In book weights
+group by 1,2,3,4,5,6,7 )  
+using (word,book_name ) )       ) group by 1
+ ```
