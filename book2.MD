@@ -8,7 +8,7 @@ count(*) over (partition by book_name,chapter_id,word ) as counter_in_chapter,
 count(*) over () as words_in_corpus , 
 count(*) over (partition by book_name) as words_in_book , 
 count(*) over (partition by book_name,chapter_id) as words_in_chapter 
-FROM `cooladata-cs-solutions.books2.raw_data_NN`   where book_name  not in ('pg39681','thehappy','Leaves_of_Grass','Life','pg34476','pg16435')   ) 
+FROM `books2.raw_data_NN`   where book_name  not in ('pg39681','thehappy','Leaves_of_Grass','Life','pg34476','pg16435')   ) 
 where counter_in_corpus > 5  and words_in_chapter > 150   
 group by 1,2,3,4,5,6,7,8,9 ) 
 
@@ -24,13 +24,13 @@ if (inbook_rank < 21 and  second_part.counter_in_chapter is null,1,0 )  as missi
 if (inbook_rank < 11 and  second_part.counter_in_chapter is null,1,0 )  as missing_in_top_10 from 
 (select * from 
 ( select * from 
-  (SELECT book_name,chapter_id  from  `cooladata-cs-solutions.books2.NN_base`   group by 1,2  ) c
+  (SELECT book_name,chapter_id  from  `books2.NN_base`   group by 1,2  ) c
   left join 
-  (SELECT word ,book_name,in_book_weight global_weight,rank() over (partition by book_name order by in_book_weight desc ) as inbook_rank   from  `cooladata-cs-solutions.books2.NN_base`   group by 1,2,3  ) b
+  (SELECT word ,book_name,in_book_weight global_weight,rank() over (partition by book_name order by in_book_weight desc ) as inbook_rank   from  `books2.NN_base`   group by 1,2,3  ) b
   using (book_name) 
 )) first_part 
 left   join
-(SELECT chapter_id , word, counter_in_chapter , words_in_chapter, local_weight, book_name ,word  as joiner  FROM `cooladata-cs-solutions.books2.NN_base`   ) second_part 
+(SELECT chapter_id , word, counter_in_chapter , words_in_chapter, local_weight, book_name ,word  as joiner  FROM `books2.NN_base`   ) second_part 
 using(book_name, chapter_id , word)    ))
 GROUP BY 1,2  order by 4 desc 
 
