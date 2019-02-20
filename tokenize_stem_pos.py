@@ -14,7 +14,8 @@ import os
 import codecs
 import nltk
 
-nltk.data.path.append("/datagen3/hagit/nltk")
+# modify here your NLTK directory name
+nltk.data.path.append("/my_nltk_directory/nltk")
 
 import glob
 
@@ -27,7 +28,8 @@ import fnmatch
 import os
 
 matches = []
-for root, dirnames, filenames in os.walk('/datagen3/hagit/university/books/input/books_by_chapters'):
+# modify here your chapters directory name
+for root, dirnames, filenames in os.walk('/books_by_chapters'):
     for filename in fnmatch.filter(filenames, '*.txt'):
         matches.append(os.path.join(root, filename))
         print filename
