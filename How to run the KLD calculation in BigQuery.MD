@@ -25,7 +25,7 @@ group by 1,2,3,4,5,6,7,8,9 )
 # Run KL distance calculation
 Save the results in <dataset.signatures>  table 
 ```
-select * , row_number() over () .... rnk
+select * , row_number() over (partition by user_id order by KL desc ) rnk from 
 ( SELECT
    if (existing_word_flag=1,
        ((local_weight -global_weight) *LOG10(local_weight /global_weight )),
@@ -68,7 +68,7 @@ select * , row_number() over () .... rnk
         FROM
           [dataset.table]  )
       )) 
-         ) 
+         )) 
 ```
 #  SELECT *  FROM `dataset.signatures`  where rnk <= 500  order by user_id , rnk   
 ```
