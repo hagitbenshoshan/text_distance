@@ -7,6 +7,7 @@ Each document contains an entry for all the words in the corpus. When the word i
 |heartili |11155        |5.705e-06      |2251264   |null        |null       |   
 ```
 # Update the base table NN_base to store global and local weights ###
+Save the results in <dataset.NN_base> table 
 ```
 select * ,'NN' pos,  counter_in_corpus/words_in_corpus as global_weight ,counter_in_book/words_in_book as in_book_weight  ,counter_in_chapter/words_in_chapter as local_weight    from 
 ( select *  from 
@@ -17,13 +18,15 @@ count(*) over (partition by book_name,chapter_id,word ) as counter_in_chapter,
 count(*) over () as words_in_corpus , 
 count(*) over (partition by book_name) as words_in_book , 
 count(*) over (partition by book_name,chapter_id) as words_in_chapter 
-FROM `books2.NN_base` )  -- replace by your  <dataset_name>.<table_name>     
+FROM `dataset.NN_base` )  -- replace by your  <dataset_name>.<table_name>     
 /* Add it only in short texts scenario:  where counter_in_corpus > 5  and words_in_chapter > 150   */ 
 group by 1,2,3,4,5,6,7,8,9 )
 ```
 # Run KL distance calculation
+Save the results in <dataset.signatures>  table 
 ```
-SELECT
+select * , row_number() over () .... rnk
+( SELECT
    if (existing_word_flag=1,
        ((local_weight -global_weight) *LOG10(local_weight /global_weight )),
       (epsilon -global_weight) *LOG10(epsilon /global_weight ))  KL,
@@ -66,4 +69,7 @@ SELECT
           [dataset.table]  )
       )) 
          ) 
-
+```
+#  SELECT *  FROM `dataset.signatures`  where rnk <= 500  order by user_id , rnk   
+```
+This is how we define the size of the signature (replace the 500 by any value) 
