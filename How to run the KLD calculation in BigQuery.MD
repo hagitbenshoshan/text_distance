@@ -1,6 +1,10 @@
 # NN_base contains only Nouns words.
 ```
 Each document contains an entry for all the words in the corpus. When the word is missing we assign 0 to it's frequency. 
+|word     |global_rank  |global_weight  |user_id   |local_weight|local_rank |
+|---------|-------------|---------------|----------|------------|-----------|
+|heartili |11155        |5.705e-06      |103511    |0.000297    |473        | 
+|heartili |11155        |5.705e-06      |2251264   |null        |null       |   
 ```
 # Update the base table NN_base to store global and local weights ###
 ```
