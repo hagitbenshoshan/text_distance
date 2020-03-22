@@ -105,7 +105,6 @@ FROM (
        in_chapter_weight local_weight,
        global_weight global_weight,
       (1/10000) epsilon
-   
       FROM
        [validation.books_10chapters_VECTORS]       
       )) 
