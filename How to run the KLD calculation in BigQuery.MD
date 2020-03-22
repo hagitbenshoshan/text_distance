@@ -1,5 +1,8 @@
-
-# create the base table NN_base to store global and local weights ###
+# NN_base contains only Nouns words.
+```
+Each document contains an entry for all the words in the corpus. When the word is missing we assign 0 to it's frequency. 
+```
+# Update the base table NN_base to store global and local weights ###
 ```
 select * ,'NN' pos,  counter_in_corpus/words_in_corpus as global_weight ,counter_in_book/words_in_book as in_book_weight  ,counter_in_chapter/words_in_chapter as local_weight    from 
 ( select *  from 
