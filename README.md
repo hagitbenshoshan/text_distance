@@ -88,6 +88,6 @@ b|	2|	7|	11|	0.6363636363636364|	1
 a|	2|	4|	11|	0.36363636363636365|	2
   ``` 
  
- Queries to calculate signatures and distances are in
+ Queries to calculate signatures and distances are in How to run the KLD calculation in BigQuery.MD
 
  
