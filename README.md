@@ -6,7 +6,7 @@
 * Input : Short text files documents , each document belongs to one author. 
 * The algorithm requires pre-processing text manipulation (tokenize,stemming,POS tagging,remove stop words) performed by https://github.com/hagitbenshoshan/text_distance/blob/master/tokenize_stem_pos.py
 ```
-Example : The input file name is review_26536435.txt , blongs to user_id = 26536435 
+Example : The input file name is https://github.com/hagitbenshoshan/text_distance/blob/master/Datasets/imdb/review_26536435.txt , blongs to user_id = 26536435 
 generates the following output: 
 ```
 document_id | original word | POS | stemmed word 
