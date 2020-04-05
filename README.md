@@ -57,9 +57,9 @@ b|9|0.5|1
 c|6|0.3333333333333333|2	 
 a|3|0.16666666666666666|3
 
-
-- Creating user's vector in Google BigQuery (result table name #VECTORS) : 
 ```
+- Creating user's vector in Google BigQuery (result table name #VECTORS) : 
+
 select *, word_counter/total_weight 	local_weight , rank() over (partition by user_id order by word_counter desc) rnk 	from 
 (select *,    sum(word_counter) over (partition by user_id )  as total_weight  from 
 ( select    word ,    user_id ,   sum(Frequency)  word_counter  
