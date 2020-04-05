@@ -21,22 +21,8 @@ heartili |11155        |5.705e-06      |2251264   |null        | null|null
 person	| 81|0.0013477678061898945|	3051084|0.00055897149245388487	|2	|335	 
 script	|92|0.00125906992857646|	3051084|null	|null	|null	
  
-# Update the base table NN_base to store global and local weights ###
-Save the results in <dataset.NN_base> table 
-```
-select * ,'NN' pos,  counter_in_corpus/words_in_corpus as global_weight ,counter_in_book/words_in_book as in_book_weight  ,counter_in_chapter/words_in_chapter as local_weight    from 
-( select *  from 
-( SELECT word ,book_name , chapter_id , 
-count(*) over (partition by word) as counter_in_corpus , 
-count(*) over (partition by book_name,word ) as counter_in_book ,   -- If exist
-count(*) over (partition by book_name,chapter_id,word ) as counter_in_chapter, 
-count(*) over () as words_in_corpus , 
-count(*) over (partition by book_name) as words_in_book , 
-count(*) over (partition by book_name,chapter_id) as words_in_chapter 
-FROM `dataset.NN_base` )  -- replace by your  <dataset_name>.<table_name>     
-/* Add it only in short texts scenario:  where counter_in_corpus > 5  and words_in_chapter > 150   */ 
-group by 1,2,3,4,5,6,7,8,9 )
-```
+# Define Epsilon value as the result of 0.5*(1/number of lines in DVR table)  # Unique words in the corpus
+
 # Run KL distance calculation
 Save the results in <dataset.signatures>  table 
 ```
