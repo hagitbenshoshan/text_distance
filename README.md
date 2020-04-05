@@ -28,7 +28,7 @@ user_id | original word | pos | word
 ```
 
 - We only include results of "Noun" (NN/NNS)  words
-- Raw data is uploaded to Google BigQuery table in the fillowing structure 
+- Raw data is uploaded to Google BigQuery table in the following structure 
 
 ```
 user_id | word | Frequency
@@ -88,6 +88,6 @@ b|	2|	7|	11|	0.6363636363636364|	1
 a|	2|	4|	11|	0.36363636363636365|	2
   ``` 
  
-  
+ Queries to calculate signatures and distances are in
 
  
