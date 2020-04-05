@@ -71,7 +71,7 @@ select 'b' word , 1 user_id , 5 Frequency union all
 select 'c' word , 1 user_id , 1 Frequency union all 
 select 'b' word , 2 user_id , 7 Frequency  
       ) 
- group by 1 ,2
+where pos like 'NN%' group by 1 ,2
    )  ) order by   2
  ```
 word|	user_id|	word_counter|	total_weight|	local_weight|	rnk	
