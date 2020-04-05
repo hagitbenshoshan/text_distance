@@ -1,12 +1,25 @@
 # NN_base contains only Nouns words.
+creating NN_base (sparse matrix) as following 
+```
+with Q1 as ( SELECT word, global_weight,rnk global_rank    FROM `DVR`  order by rnk /*limit 100*/ ) , 
+     Q2 as ( SELECT user_id                                FROM `VECTORS`  group by 1  /*limit 34*/ ) , 
+     Q3 as ( SELECT word  , local_weight, user_id, counter , lrnk local_rank   FROM `VECTORS`   )  
+     select * from ( select * from Q1 cross join Q2  ) 
+     left join 
+     Q3   using (word,user_id) 
+     order by  user_id , counter  desc  
+```
+
 
 ```
-Each document contains an entry for all the words in the corpus. When the word is missing we assign 0 to it's frequency. 
+Each document contains an entry for all the words in the corpus. When the word is missing we assign 0 to it's local weight. 
 ```
-word     |global_rank  |global_weight  |doc_id    |local_weight|local_rank  
----------|-------------|---------------|----------|------------|----------- 
-heartili |11155        |5.705e-06      |103511    |0.000297    |473         
-heartili |11155        |5.705e-06      |2251264   |null        |null         
+word     |global_rank  |global_weight  |user_id   |local_weight| counter |local_rank  
+---------|-------------|---------------|----------|------------|---------|---------- 
+heartili |11155        |5.705e-06      |103511    |0.000297    | 5 |473         
+heartili |11155        |5.705e-06      |2251264   |null        | null|null
+person	| 81|0.0013477678061898945|	3051084|0.00055897149245388487	|2	|335	 
+script	|92|0.00125906992857646|	3051084|null	|null	|null	
  
 # Update the base table NN_base to store global and local weights ###
 Save the results in <dataset.NN_base> table 
