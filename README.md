@@ -86,8 +86,10 @@ b|	1|	5|	12|	0.4166666666666667|	2
 c|	1|	1|	12|	0.08333333333333333|	3	 
 b|	2|	7|	11|	0.6363636363636364|	1	 
 a|	2|	4|	11|	0.36363636363636365|	2
-  ``` 
+``` 
  
-Queries to calculate signatures and distances are in https://github.com/hagitbenshoshan/text_distance/blob/master/How%20to%20run%20the%20KLD%20calculation%20in%20BigQuery.MD
+Queries to calculate signatures and distances are in 
+```
+https://github.com/hagitbenshoshan/text_distance/blob/master/How%20to%20run%20the%20KLD%20calculation%20in%20BigQuery.MD
 
  
