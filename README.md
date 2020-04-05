@@ -5,21 +5,26 @@
 ### Thesis - Datasetes and algorithm to compute distances between ranked non-conjoint lists 
 * Input : Short text files documents , each document belongs to one author. 
 * The algorithm requires pre-processing text manipulation (tokenize,stemming,POS tagging,remove stop words) performed by https://github.com/hagitbenshoshan/text_distance/blob/master/tokenize_stem_pos.py
-```
-Example : The input file name is https://github.com/hagitbenshoshan/text_distance/blob/master/Datasets/imdb/review_26536435.txt , blongs to user_id = 26536435 
+ 
+Example : The input file  https://github.com/hagitbenshoshan/text_distance/blob/master/Datasets/imdb/review_26536435.txt  blongs to user_id 26536435 
 generates the following output: 
-```
-document_id | original word | POS | stemmed word 
+
+user_id | original word | pos | word 
 ------------|---------------|-----|---------------    
-review_26536435.txt|matrix|NN|matrix
-review_26536435.txt|like|IN|like
-review_26536435.txt|time|NN|time
-review_26536435.txt|science|NN|scienc
-review_26536435.txt|fiction|NN|fiction
-review_26536435.txt|movies|NN|movi
-review_26536435.txt|makes|VB|make
-review_26536435.txt|classic|JJ|classic
-review_26536435.txt|matrix|NN|matrix
+26536435|looking|NN|look
+26536435|back|RB|back
+26536435|cyberpunk|NN|cyberpunk
+26536435|blockbuster|NN|blockbust
+26536435|matrix|NN|matrix
+26536435|like|IN|like
+26536435|time|NN|time
+26536435|capsule|NN|capsul
+26536435|culmination|NN|culmin
+26536435|science|NN|scienc
+26536435|fiction|NN|fiction
+26536435|movies|NN|movi
+26536435|90`s|CD|90`s
+26536435|it`s|NN|it`
 ```
 
 - We only include results of "Noun" (NN/NNS)  words
