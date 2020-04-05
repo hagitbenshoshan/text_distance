@@ -21,7 +21,7 @@ heartili |11155        |5.705e-06      |2251264   |null        | null|null
 person	| 81|0.0013477678061898945|	3051084|0.00055897149245388487	|2	|335	 
 script	|92|0.00125906992857646|	3051084|null	|null	|null	
  
-# Define Epsilon value as the result of 0.5*(1/number of lines in DVR table)  # Unique words in the corpus
+### Define Epsilon value as the result of 0.5*(1/number of lines in DVR table)  # Unique words in the corpus
 
 # Run KL distance calculation
 Save the results in <dataset.signatures>  table 
