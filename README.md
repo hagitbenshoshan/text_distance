@@ -63,7 +63,7 @@ a|3|0.16666666666666666|3
 select *, word_counter/total_weight 	local_weight , rank() over (partition by user_id order by word_counter desc) rnk 	from 
 (select *,    sum(word_counter) over (partition by user_id )  as total_weight  from 
 ( select    word ,    user_id ,   sum(Frequency)  word_counter  
-from  (
+from  ( -- Replace the following lines with your raw data table name 
 select 'a' word , 1 user_id , 3 Frequency union all 
 select 'a' word , 1 user_id , 3 Frequency union all 
 select 'a' word , 2 user_id , 4 Frequency union all 
@@ -82,11 +82,7 @@ c|	1|	1|	12|	0.08333333333333333|	3
 b|	2|	7|	11|	0.6363636363636364|	1	 
 a|	2|	4|	11|	0.36363636363636365|	2
   ``` 
-  word|word_counter|global_weight|rnk
-  ----|------------|-------------|----
-b|9|0.5|1	 
-c|6|0.3333333333333333|2	 
-a|3|0.16666666666666666|3  
+ 
   
 
  
