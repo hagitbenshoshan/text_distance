@@ -1,8 +1,8 @@
 # NN_base contains only Nouns words.
 creating NN_base (sparse matrix) as following 
 ```
-with Q1 as ( SELECT word, global_weight,rnk global_rank    FROM `DVR`  order by rnk /*limit 100*/ ) , 
-     Q2 as ( SELECT user_id                                FROM `VECTORS`  group by 1  /*limit 34*/ ) , 
+with Q1 as ( SELECT word, global_weight,rnk global_rank    FROM `DVR`  order by rnk    ) , 
+     Q2 as ( SELECT user_id                                FROM `VECTORS`  group by 1  ) , 
      Q3 as ( SELECT word  , local_weight, user_id, counter , lrnk local_rank   FROM `VECTORS`   )  
      select * from ( select * from Q1 cross join Q2  ) 
      left join 
