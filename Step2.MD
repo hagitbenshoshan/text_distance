@@ -1,3 +1,5 @@
+Working example - Create signatures for Shakespeare dataset
+
 # Create the sparse matrix (results saved in table : NN_base) 
 ```
 with Q1 as ( SELECT word, weight global_weight, word_counter global_counter  FROM `ds.DVR`     ) , 
