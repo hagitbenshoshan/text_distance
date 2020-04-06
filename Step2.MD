@@ -51,9 +51,9 @@ select * , row_number() over (partition by user_id order by KL desc ) rnk from
         FROM
           [ds.NN_base]  )
       ))   ))
-      ```
+```
 # Cut the signatures in 500 most contributing words (results saved in table : kl_signatures) 
-    ```
+```
 select * from ( SELECT * , row_number() over (partition by user_id order by KL desc) kl_rnk  FROM [ds.kl_results] )
 where kl_rnk <=500 
-    ```   
+```   
