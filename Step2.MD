@@ -60,4 +60,4 @@ select * from ( SELECT * , row_number() over (partition by user_id order by KL d
 where kl_rnk <=500 
 ```
 # Results (Example of Shakespere books) 
-
+https://github.com/hagitbenshoshan/text_distance/blob/master/KLD%20signatures.png
