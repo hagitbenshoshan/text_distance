@@ -3,21 +3,26 @@
  
 with Q1 as (select user_id , word , KLR KLR1 FROM imdb3.KLDS  ),
      Q2 as (select user_id , word , KLR KLR2 FROM imdb3.KLDS  ), 
---     Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 4000000  and 4199999)  
---   Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 4200000  and 4399999) 
---Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 4400000  and 4599999) 
---  Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 4600000  and 4799999) 
+-- Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 4000000  and 4199999)  
+-- Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 4200000  and 4399999) 
+-- Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 4400000  and 4599999) 
+-- Q3 as    (select user1 , user2   from  imdb3.users_pairs_big_listx      where  id between 4600000  and 4799999) 
 -- Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 4800000  and 4999999) 
 -- Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 5000000 and 5199999) 
 -- Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 5200000 and 5399999) 
 -- Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 5400000 and 5599999) 
---  Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 5600000 and 5799999) 
+-- Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 5600000 and 5799999) 
 -- Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 5800000 and 5999999)  
-  Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 7800000 and 8999999)  
+   Q3 as   (select user1  , user2   from  imdb3.users_pairs_big_listx      where  id between 7800000 and 8999999)  
 
  select sum(csize) csize , sum(diff) / sum(csize) distance_between_users , user1,user2 from 
 (select sum(csize) csize , sum(abs(u1-u2))  diff ,word , user1, user2 from 
 (select   word,max(u1) u1 , max(u2) u2 , user1,user2, 1 as csize     from  
-( select word, if  (user_id = user1,KLR1,0) u1, if  (user_id = user2,KLR1,0) u2, user1,user2  from Q1    cross join Q3   where user_id = user1 or user_id=user2    ) Q11  group by word,user1, user2 ) group by word , user1, user2   ) 
+( select word, if  (user_id = user1,KLR1,0) u1, 
+               if  (user_id = user2,KLR1,0) u2, user1,user2  from Q1    
+               cross join Q3   
+               where user_id = user1 or user_id=user2 ) Q11  
+               group by word,user1, user2 ) 
+               group by word , user1, user2) 
 group by     user1, user2 
  
