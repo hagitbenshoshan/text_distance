@@ -23,7 +23,8 @@ Normalize:
 We calculated the sum of all distances we found , and divided it by the number of words in the common corpus . (Minimum=500 , Maximum=1000) . 
 
 ### 1. Create a table of all the possible pairs combinations (cross join)  , table name #users_pairs 
-```with Q1 as   (select user_id   user1  from  VECTORS group by 1  ) ,  
+```
+with Q1 as   (select user_id   user1  from  VECTORS group by 1  ) ,  
      Q2 as   (select user_id   user2  from  VECTORS group by 1  )
      select * from Q1 cross join Q2
 ``` 
@@ -34,10 +35,21 @@ We calculated the sum of all distances we found , and divided it by the number o
 |286445| 486368	 
 |430992| 14612223	 
  
- ### 2. Create flagged (positive/negative) KLD signatures table 
+ ### 2. Create flagged (positive/negative) KLD signatures table , table_name KLDS
 ```
+SELECT  user_id , sign , word    case
+when sign =1  then KL_SYM +1  
+else KL_SYM-1   end as KLR 
+FROM `SIGNATURES`
 ```
-
+|Row|	user_id|	sign|	word|	KLR 	 
+|---|--------|-----|-----|----
+1|925405	|1|	vote|	1.0262807390446969	 
+2|	925405|	1|	movi|	1.011751048183591	 
+3|	925405|	1|	definet|	1.0114686347968689	 
+4|	925405|	1|	gag|	1.0034762996406752	 
+5|	925405|	1|	watch|	1.003279590849277	 
+6	|925405|	-1|	audienc|	-0.9968483975383385	 
  
  ### 3. calculate distance between pairs of users 
 
