@@ -1,3 +1,4 @@
+# How to calculate similarity/distance between 2 signatures
 Given a pair of signatures, how can we decide whether they were written by the same author or not?
 Our method is to examine the source of the distance. Signatures of two authors can differ both in which words they contain and in why they contain these words - whether because they are used unusually frequently or unusually infrequently.
 
