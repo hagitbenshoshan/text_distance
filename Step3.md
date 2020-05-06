@@ -68,3 +68,8 @@ select sum(csize) csize , sum(diff) / sum(csize) distance_between_users , user1,
 group by     user1, user2 
 ```
 
+Row|	csize	|distance_between_users|	user1	|user2|
+---|-------|----------------------|-------|-----|
+1	|869|	0.899003311889057	|3487897	|19835265	 
+2	|854|	0.8635888345541498	|1622306	|2512513	 
+3	|864|	0.877976033795813	|1562896	|3036648	 
