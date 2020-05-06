@@ -52,4 +52,19 @@ FROM `SIGNATURES`
 6	|925405|	-1|	audienc|	-0.9968483975383385	 
  
  ### 3. calculate distance between pairs of users 
+```
+with Q1 as (select user_id , word , KLR KLR1 FROM KLDS), 
+     Q2 as (select user1  , user2   from  users_pairs)  
+
+select sum(csize) csize , sum(diff) / sum(csize) distance_between_users , user1,user2 from 
+(select sum(csize) csize , sum(abs(u1-u2))  diff ,word , user1, user2 from 
+(select   word,max(u1) u1 , max(u2) u2 , user1,user2, 1 as csize     from  
+( select word, if  (user_id = user1,KLR1,0) u1, 
+               if  (user_id = user2,KLR1,0) u2, user1,user2  from Q1    
+               cross join Q2  
+               where user_id = user1 or user_id=user2 ) Q11  
+               group by word,user1, user2 ) 
+               group by word , user1, user2) 
+group by     user1, user2 
+```
 
