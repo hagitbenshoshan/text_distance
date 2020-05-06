@@ -21,3 +21,6 @@ The distance between the signatures is auclidian distance between the 2 KLD+/-1 
 Normalize: 
 
 We calculated the sum of all distances we found , and divided it by the number of words in the common corpus . (Minimum=500 , Maximum=1000) . 
+
+## 1. Create a table of all the possible pairs combinations (cross join)  , name [users_pairs] 
+
