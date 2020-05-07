@@ -22,7 +22,7 @@ Normalize:
 
 We calculated the sum of all distances we found , and divided it by the number of words in the common corpus . (Minimum=500 , Maximum=1000) . 
 
-### 1. Create a table of all the possible pairs combinations (cross join)  , table name #users_pairs 
+### 1. Create a table of all the possible pairs combinations (cross join)  , table name #cross_categories 
 ```
 with Q1 as   (select user_id   user1  from  VECTORS group by 1  ) ,  
      Q2 as   (select user_id   user2  from  VECTORS group by 1  )
@@ -54,7 +54,7 @@ FROM `SIGNATURES`
  ### 3. calculate distance between pairs of users 
 ```
 with Q1 as (select user_id , word , KLR KLR1 FROM KLDS), 
-     Q2 as (select user1  , user2   from  users_pairs)  
+     Q2 as (select user1  , user2   from  cross_categories)  
 
 select sum(csize) csize , sum(diff) / sum(csize) distance_between_users , user1,user2 from 
 (select sum(csize) csize , sum(abs(u1-u2))  diff ,word , user1, user2 from 
